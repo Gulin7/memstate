@@ -25,9 +25,10 @@ namespace Memstate
             return Task.Run((Action) _journalStream.Dispose);
         }
 
-        public IEnumerable<JournalRecord> GetRecords(long fromRecord = 0)
+        public async IAsyncEnumerable<JournalRecord> GetRecords(long fromRecord = 0)
         {
-            foreach (var record in _serializer.ReadObjects<JournalRecord>(_journalStream))
+            var records = await Task.Run(() => _serializer.ReadObjects<JournalRecord>(_journalStream));
+            await foreach (var record in records)
             {
                 if (record.RecordNumber >= fromRecord)
                 {

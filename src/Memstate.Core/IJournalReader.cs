@@ -4,6 +4,6 @@ namespace Memstate
 {
     public interface IJournalReader : IAsyncDisposable
     {
-        IEnumerable<JournalRecord> GetRecords(long fromRecord = 0);
+        IAsyncEnumerable<JournalRecord> GetRecords(long fromRecord = 0);
     }
 }

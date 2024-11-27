@@ -37,7 +37,7 @@ namespace Memstate.EventStore
             return Task.CompletedTask;
         }
 
-        public IEnumerable<JournalRecord> GetRecords(long fromRecord = 0)
+        public async IAsyncEnumerable<JournalRecord> GetRecords(long fromRecord = 0)
         {
             var nextRecord = fromRecord;
 
@@ -45,7 +45,7 @@ namespace Memstate.EventStore
 
             while (true)
             {
-                var slice = _connection.ReadStreamEventsForwardAsync(_streamName, nextRecord, _eventsPerSlice, false).Result;
+                var slice = await _connection.ReadStreamEventsForwardAsync(_streamName, nextRecord, _eventsPerSlice, false);
 
                 _logger.Debug("{0} events in slice from {0}", slice.Events.Length, slice.FromEventNumber);
 

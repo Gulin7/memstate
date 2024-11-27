@@ -53,10 +53,10 @@ namespace Memstate
             return new Engine<T>(_settings, model, subscriptionSource, writer, nextRecordNumber);
         }
 
-        internal static TState Load<TState>(IJournalReader reader, TState initial, out long lastRecordNumber)
+        internal static async Task<TState> Load<TState>(IJournalReader reader, TState initial, out long lastRecordNumber)
         {
             lastRecordNumber = -1;
-            foreach (var journalRecord in reader.GetRecords())
+            await foreach (var journalRecord in reader.GetRecords())
             {
                 try
                 {
